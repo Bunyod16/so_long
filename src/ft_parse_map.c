@@ -6,7 +6,7 @@
 /*   By: bunyodshams <bunyodshams@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 01:51:24 by bunyodshams       #+#    #+#             */
-/*   Updated: 2021/11/20 05:12:20 by bunyodshams      ###   ########.fr       */
+/*   Updated: 2021/11/21 03:28:53 by bunyodshams      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,70 +41,63 @@ int	map_rectangle(int fd)
 	return (1);
 }
 
-int	find_max_chars(char *map)
-{
-	const int	fd = open(map, O_RDONLY);
-	char		*buf;
-	int			count;
-
-	count = 0;
-	buf = malloc(sizeof(char *) * 2);
-	while(read(fd, buf, 1) > 0)
-	{
-		if (*buf == '\n')
-			return (count);
-		count++;
-	}
-	return (count);
-}
-
-int	find_line_num(char *map)
-{
-	const int	fd = open(map, O_RDONLY);
-	char		*buf;
-	int			count;
-
-	count = 1;
-	buf = malloc(sizeof(char *) * 2);
-	while(read(fd, buf, 1) > 0)
-	{
-		if (*buf == '\n')
-			count++;
-	}
-	return (count);
-}
-
-int map_check_walls(char *map)
+int	map_check_walls(char *map)
 {
 	char		*buf;
-	int			line;
-	int			char_num;
+	int			ln;
+	int			c_num;
 	const int	fd = open(map, O_RDONLY);
-	const int	last_c = find_max_chars(map);
-	const int	last_l = find_line_num(map);
 
 	buf = malloc(sizeof(char *) * 2);
-	line = 1;
-	char_num = 1;
-	while(read(fd, buf, 1) > 0)
+	ln = 1;
+	c_num = 1;
+	while (read(fd, buf, 1) > 0)
 	{
-		if ((((line == last_l || line == 1) && char_num != last_c + 1) 
-			|| char_num == 1 || char_num == last_c) && *buf != '1')
+		if ((((ln == max_ln(map) || ln == 1) && c_num != max_chr(map) + 1)
+				|| c_num == 1 || c_num == max_chr(map)) && *buf != '1')
 		{
-			printf("%d %d",line, char_num);
 			free(buf);
 			return (0);
 		}
 		if (*buf == '\n')
 		{
-			char_num = 1;
-			line++;
+			c_num = 1;
+			ln++;
 		}
 		else
-			char_num++;
+			c_num++;
 	}
 	free(buf);
 	return (1);
+}
+
+int	map_check_chars(int fd)
+{
+	char			*buf;
+	t_char_count	*char_count;
+
+	buf = malloc(sizeof(char *) * 2);
+	char_count = malloc(sizeof(t_char_count *));
+	set_zero(char_count);
+	while(read(fd, buf, 1) > 0)
+	{
+		if (*buf == '0' || *buf == '1' || *buf=='C' || *buf=='E' || *buf=='P' || *buf=='\n')
+		{
+			if (*buf == 'E')
+				char_count->E = 1;
+			else if (*buf == 'C')
+				char_count->C = 1;
+			else if (*buf == 'P')
+				char_count->P = 1;
+		}
+		else
+		{
+			set_zero(char_count);
+			break;
+		}
+	}
+	free(buf);
+	return (!char_count->C || !char_count->E || !char_count->P);
 }
 
 int	ft_parse_map(int argc, char **argv)
@@ -114,10 +107,11 @@ int	ft_parse_map(int argc, char **argv)
 
 	if (argc != 2)
 		return (0);
-	fd = open(argv[1], O_RDONLY);
-	if (map_rectangle(fd) == 0)
+	if (map_rectangle(open(argv[1], O_RDONLY)) == 0)
 		return (0);
 	if (map_check_walls(argv[1]) == 0)
+		return (0);
+	if (map_check_chars(open(argv[1], O_RDONLY)) == 0)
 		return (0);
 	buf = malloc(sizeof(char *) * 2);
 	fd = open(argv[1], O_RDONLY);

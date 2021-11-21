@@ -4,6 +4,7 @@ int main(int argc, char **argv)
 {
     void    *mlx_ptr;
     void    *win_ptr;
+    char    *line;
 
     if (ft_parse_map(argc, argv) == 0)
         perror("Error");
