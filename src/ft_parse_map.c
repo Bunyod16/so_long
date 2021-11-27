@@ -6,119 +6,95 @@
 /*   By: bunyodshams <bunyodshams@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 01:51:24 by bunyodshams       #+#    #+#             */
-/*   Updated: 2021/11/21 03:28:53 by bunyodshams      ###   ########.fr       */
+/*   Updated: 2021/11/27 16:16:08 by bunyodshams      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-int	map_rectangle(int fd)
+t_char_count	*set_zero(t_char_count *char_count)
 {
-	char		*buf;
-	int			len;
-	int			temp;
+	char_count = malloc(sizeof(t_char_count));
+	char_count->C = 0;
+	char_count->E = 0;
+	char_count->P = 0;
 
-	buf = malloc(sizeof(char *) * 2);
-	len = 0;
-	temp = 0;
-	while (read(fd, buf, 1) > 0)
+	return (char_count);
+}
+
+int	valid_walls(char *line, int line_num)
+{
+	int i;
+	int last;
+
+	last = ft_strlen(line) - 2;
+	i = 0;
+	while (line[i])
 	{
-		if (*buf == '\n')
-		{
-			if (len == 0)
-				len = temp;
-			if (temp == len)
-				temp = 0;
-			else
-				break ;
-		}
-		else
-			temp++;
+		if (i == (int)ft_strlen(line) - 1 && line[i] == '\n')
+			return (1);
+		if ((line_num == 1 || line_num == -1) && line[i] != '1')
+			return (0);
+		else if ((i == 0 || i == last) && line[i] != '1')
+			return (0);
+		i++;
 	}
-	free (buf);
-	if (len == 0 || temp != len)
-		return (0);
 	return (1);
 }
 
-int	map_check_walls(char *map)
+int	valid_chars(char *line, t_char_count *char_count)
 {
-	char		*buf;
-	int			ln;
-	int			c_num;
-	const int	fd = open(map, O_RDONLY);
+	int i;
 
-	buf = malloc(sizeof(char *) * 2);
-	ln = 1;
-	c_num = 1;
-	while (read(fd, buf, 1) > 0)
+	i = -1;
+	while (line[++i])
 	{
-		if ((((ln == max_ln(map) || ln == 1) && c_num != max_chr(map) + 1)
-				|| c_num == 1 || c_num == max_chr(map)) && *buf != '1')
+		if (line[i] == 'E') 
+			char_count->E++;
+		else if (line[i] == 'C')
+			char_count->C++;
+		else if (line[i] == 'P')
+			char_count->P++;
+		else if (line[i] == '0' || line[i] == '1' || line[i] == '\n')
+			continue;
+		else
 		{
-			free(buf);
+			printf("ret\n");
 			return (0);
 		}
-		if (*buf == '\n')
-		{
-			c_num = 1;
-			ln++;
-		}
-		else
-			c_num++;
 	}
-	free(buf);
 	return (1);
 }
 
-int	map_check_chars(int fd)
+void	set_map(int char_len, int line_len, mlx_data *g_dat)
 {
-	char			*buf;
-	t_char_count	*char_count;
-
-	buf = malloc(sizeof(char *) * 2);
-	char_count = malloc(sizeof(t_char_count *));
-	set_zero(char_count);
-	while(read(fd, buf, 1) > 0)
-	{
-		if (*buf == '0' || *buf == '1' || *buf=='C' || *buf=='E' || *buf=='P' || *buf=='\n')
-		{
-			if (*buf == 'E')
-				char_count->E = 1;
-			else if (*buf == 'C')
-				char_count->C = 1;
-			else if (*buf == 'P')
-				char_count->P = 1;
-		}
-		else
-		{
-			set_zero(char_count);
-			break;
-		}
-	}
-	free(buf);
-	return (!char_count->C || !char_count->E || !char_count->P);
+	g_dat->wn_wdt = (char_len - 1) * 32;
+	g_dat->wn_len = line_len * 32;
 }
 
-int	ft_parse_map(int argc, char **argv)
+int		ft_parse_map(char *map, mlx_data *g_dat)
 {
-	int			fd;
-	char		*buf;
+	int				fd;
+	char			*line;
+	int				i;
+	size_t			len;
 
-	if (argc != 2)
-		return (0);
-	if (map_rectangle(open(argv[1], O_RDONLY)) == 0)
-		return (0);
-	if (map_check_walls(argv[1]) == 0)
-		return (0);
-	if (map_check_chars(open(argv[1], O_RDONLY)) == 0)
-		return (0);
-	buf = malloc(sizeof(char *) * 2);
-	fd = open(argv[1], O_RDONLY);
-	while (read(fd, buf, 1) > 0)
+	fd = open(map, O_RDONLY);
+	i = 0;
+	line = get_next_line(fd);
+	len = ft_strlen(line);
+	g_dat->char_count = set_zero(g_dat->char_count);
+	while (line && ++i)
 	{
-		printf("%c",*buf);
+		if (valid_walls(line, i) && valid_chars(line, g_dat->char_count)
+				&& (ft_strlen(line) == len || (ft_strlen(line) == len - 1
+					&& !ft_strchr(line, '\n'))))
+			line = get_next_line(fd);
+		else
+			return 0;
 	}
-	printf("passed map check\n");
+	if (!g_dat->char_count->C || !g_dat->char_count->E || !g_dat->char_count->P)
+		return	0;
+	set_map(len, i, g_dat);
 	return (1);
 }

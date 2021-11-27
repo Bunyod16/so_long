@@ -4,7 +4,7 @@ CC=gcc -Wall -Werror -Wextra
 all: $(NAME)
 
 $(NAME):
-	$(CC) src/*.c -Lminilibx -lmlx -framework OpenGL -framework AppKit -lz -o so_long
+	$(CC) src/*.c -Llibft -lft -Lminilibx -lmlx -framework OpenGL -framework AppKit -lz -o so_long
 
 clean:
 	rm -rf so_long *.o
