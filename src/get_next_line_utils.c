@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bunyodshams <bunyodshams@student.42.fr>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/02 23:41:23 by bunyodshams       #+#    #+#             */
+/*   Updated: 2021/12/02 23:41:23 by bunyodshams      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../so_long.h"
 
 size_t	gnl_strlen(const char *s)
@@ -54,7 +66,8 @@ char	*gnl_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	if (!gnl_strlen(s1) && !gnl_strlen(s2))
 		return (gnl_strdup(""));
-	string = (char *)malloc(sizeof(char) * (gnl_strlen(s1) + gnl_strlen(s2) + 1));
+	string = (char *)malloc(sizeof(char)
+			* (gnl_strlen(s1) + gnl_strlen(s2) + 1));
 	if (!string)
 		return (NULL);
 	string[(gnl_strlen(s1) + gnl_strlen(s2))] = 0;

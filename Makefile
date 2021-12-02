@@ -4,12 +4,17 @@ CC=gcc -Wall -Werror -Wextra
 all: $(NAME)
 
 $(NAME):
-	$(CC) src/*.c -Llibft -lft -Lminilibx -lmlx -framework OpenGL -framework AppKit -lz -o so_long
+	cd libft; make re; make clean;
+	$(CC) -c src/*.c
+	$(CC) *.o -Llibft -lft -Lminilibx -lmlx -framework OpenGL -framework AppKit -lz -o so_long
+
+fclean: clean
+	rm -rf so_long
 
 clean:
-	rm -rf so_long *.o
+	rm -rf  *.o
 
-re: clean
+re: fclean
 	make
 
 %.o: %.c
