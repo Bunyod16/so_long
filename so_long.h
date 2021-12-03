@@ -6,7 +6,7 @@
 /*   By: bunyodshams <bunyodshams@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 02:32:29 by bunyodshams       #+#    #+#             */
-/*   Updated: 2021/12/03 03:10:39 by bunyodshams      ###   ########.fr       */
+/*   Updated: 2021/12/03 13:10:43 by bunyodshams      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,7 @@ char	*gnl_strjoin(char const *s1, char const *s2);
 char	*gnl_strdup(const char *s1);
 size_t	gnl_strlen(const char *s);
 int		gnl_strchr(const char *s, int c);
+void	set_data(int char_len, int line_len, t_mlx_data *g_dat);
+void	set_zero(t_mlx_data *g_dat);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: bunyodshams <bunyodshams@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 02:00:51 by bunyodshams       #+#    #+#             */
-/*   Updated: 2021/12/03 03:11:24 by bunyodshams      ###   ########.fr       */
+/*   Updated: 2021/12/03 13:18:11 by bunyodshams      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,19 @@ void	ft_put_image(char c, int x, int y, t_mlx_data *g)
 	else
 		img_ptr = g->e;
 	mlx_put_image_to_window(g->mlx_ptr, g->wn, img_ptr, x, y);
+}
+
+void	set_zero(t_mlx_data *g_dat)
+{
+	g_dat->char_count.c = 0;
+	g_dat->char_count.e = 0;
+	g_dat->char_count.p = 0;
+}
+
+void	set_data(int char_len, int line_len, t_mlx_data *g_dat)
+{
+	g_dat->wn_wdt = (char_len - 1) * 32;
+	g_dat->wn_len = line_len * 32;
+	g_dat->moves = 0;
+	g_dat->player.coins = 0;
 }
