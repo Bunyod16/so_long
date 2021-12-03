@@ -14,6 +14,7 @@ all: $(NAME)
 
 $(NAME):
 	cd libft; make re; make clean;
+	cd minilibx; make;
 	$(CC) -c $(SRC_PATH)
 	$(CC) $(SRC_OBJ) -Llibft -lft -Lminilibx -lmlx -framework OpenGL -framework AppKit -lz -o $(NAME)
 

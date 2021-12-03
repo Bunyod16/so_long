@@ -6,7 +6,7 @@
 /*   By: bunyodshams <bunyodshams@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 01:51:24 by bunyodshams       #+#    #+#             */
-/*   Updated: 2021/12/03 13:25:53 by bunyodshams      ###   ########.fr       */
+/*   Updated: 2021/12/03 22:26:06 by bunyodshams      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 int	valid_extension(char *map)
 {
 	int len;
+	int i;
 
 	len = ft_strlen(map);
+	i = len - 4;
 	if (len < 5)
 		return (0);
-	if (map[-1] == 'r' && map[-2] == 'e' && map[-3] == 'b'
-		&& map[-4] == '.')
+	if (map[i] == '.' && map[i + 1] == 'b' && map[i + 2] == 'e'
+		&& map[i + 3] == 'r')
 		return (1);
 	return (0);
 }
