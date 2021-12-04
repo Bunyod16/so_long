@@ -6,7 +6,7 @@
 /*   By: bunyodshams <bunyodshams@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 01:51:24 by bunyodshams       #+#    #+#             */
-/*   Updated: 2021/12/03 22:26:06 by bunyodshams      ###   ########.fr       */
+/*   Updated: 2021/12/04 00:34:07 by bunyodshams      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	valid_extension(char *map)
 {
-	int len;
-	int i;
+	int	len;
+	int	i;
 
 	len = ft_strlen(map);
 	i = len - 4;
@@ -27,24 +27,26 @@ int	valid_extension(char *map)
 	return (0);
 }
 
-int	valid_walls(char *line, int line_num)
+int	valid_walls(char *line, int line_num, int len)
 {
 	int	i;
 	int	last;
 
 	last = ft_strlen(line) - 2;
 	i = 0;
-	while (line[i])
+	if (line_num == 1 || line_num == -1)
 	{
-		if (i == (int)ft_strlen(line) - 1 && line[i] == '\n')
+		while (line[i] == '1')
+			i++;
+		if ((line[i] == '\n' && i == len -1) || (!line[i] && line_num == -1
+				&& !ft_strchr(line, '\n')))
 			return (1);
-		if ((line_num == 1 || line_num == -1) && line[i] != '1')
-			return (0);
-		else if ((i == 0 || i == last) && line[i] != '1')
-			return (0);
-		i++;
+		return (0);
 	}
-	return (1);
+	if (line[0] == '1' && line[len - 1] == '\n'
+		&& line[len - 2] == '1' && line_num != 1)
+		return (1);
+	return (0);
 }
 
 int	valid_chars(char *line, t_mlx_data *g_dat)
@@ -83,9 +85,8 @@ int	ft_parse_map(char *map, t_mlx_data *g)
 	set_zero(g);
 	while (line && ++i)
 	{
-		if (valid_walls(line, i) && valid_chars(line, g)
-			&& (ft_strlen(line) == len || (ft_strlen(line) == len - 1
-					&& !ft_strchr(line, '\n'))))
+		if ((valid_walls(line, i, len) && valid_chars(line, g)
+				&& ft_strlen(line) == len) || valid_walls(line, -1, len))
 			line = get_next_line(fd);
 		else
 			return (0);
