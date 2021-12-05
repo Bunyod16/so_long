@@ -24,9 +24,6 @@ fclean: clean
 clean:
 	rm -rf $(SRC_OBJ)
 
-test:
-	@echo *.o
-
 re: fclean
 	make
 

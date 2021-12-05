@@ -12,6 +12,29 @@
 
 #include "../so_long.h"
 
+int	end_with_nl(char *map)
+{
+	int		fd;
+	char	*line;
+	int		flag;
+
+	fd = open(map, O_RDONLY);
+	line = get_next_line(fd);
+	flag = 0;
+	while (line)
+	{
+		if (ft_strlen(line) > 3)
+		{
+			if (ft_strchr(line, '\n'))
+				flag = 1;
+			else
+				flag = 0;
+		}
+		line = get_next_line(fd);
+	}
+	return (flag);
+}
+
 char	*gnl_cut(char **builder)
 {
 	char	*line;

@@ -6,7 +6,7 @@
 /*   By: bunyodshams <bunyodshams@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 01:51:24 by bunyodshams       #+#    #+#             */
-/*   Updated: 2021/12/04 00:34:07 by bunyodshams      ###   ########.fr       */
+/*   Updated: 2021/12/05 17:22:07 by bunyodshams      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	ft_parse_map(char *map, t_mlx_data *g)
 
 	i = 0;
 	line = get_next_line(fd);
-	if (!line || fd < 1)
+	if (!line || fd < 1 || end_with_nl(map))
 		return (0);
 	len = ft_strlen(line);
 	set_zero(g);

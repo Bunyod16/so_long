@@ -6,7 +6,7 @@
 /*   By: bunyodshams <bunyodshams@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 02:32:29 by bunyodshams       #+#    #+#             */
-/*   Updated: 2021/12/03 13:10:43 by bunyodshams      ###   ########.fr       */
+/*   Updated: 2021/12/05 02:32:47 by bunyodshams      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct s_map_opts
 	int	y;
 }	t_map_opts;
 
+int		end_with_nl(char *map);
 int		close_window(t_mlx_data *g);
 void	end_game(t_mlx_data *g);
 int		ft_parse_map(char *map, t_mlx_data *g_dat);
